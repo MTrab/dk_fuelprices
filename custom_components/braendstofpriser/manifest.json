@@ -1,0 +1,18 @@
+{
+    "domain": "braendstofpriser",
+    "name": "Brændstofpriser",
+    "after_dependencies": [
+        "http"
+    ],
+    "codeowners": [
+        "@MTrab"
+    ],
+    "config_flow": true,
+    "documentation": "https://github.com/MTrab/braendstofpriser/blob/master/README.md",
+    "iot_class": "cloud_polling",
+    "issue_tracker": "https://github.com/MTrab/braendstofpriser/issues",
+    "requirements": [
+        "pybraendstofpriser==0.0.1"
+    ],
+    "version": "0.0.1"
+}
