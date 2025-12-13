@@ -20,16 +20,24 @@ categories:
       - 'bugfix'
       - 'bug'
 
-  - title: '🔈 Translations update'
-    labels:
-      - 'translation'
-
   - title: '🧰 Maintenance'
     label: 'chore'
 
   - title: '📦 Dependencies'
     labels:
       - 'dependencies'
+
+  - title: 'New companies'
+    labels:
+      - 'companies_new'
+
+  - title: 'Removed companies'
+    labels:
+      - 'companies_remove'
+
+  - title: 'Updated companies'
+    labels:
+      - 'companies_update'
 
 version-resolver:
   major:

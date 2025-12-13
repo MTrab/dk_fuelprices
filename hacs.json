@@ -2,7 +2,7 @@
     "name": "Brændstofpriser",
     "render_readme": true,
     "homeassistant": "2025.10.0",
-    "zip_release": true,
+    "zip_release": false,
     "filename": "braendstofpriser.zip",
     "country": [
         "DK"
