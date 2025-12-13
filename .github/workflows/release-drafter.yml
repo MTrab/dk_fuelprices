@@ -12,6 +12,8 @@ jobs:
   update_release_draft:
     name: Update release draft
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # Grant write permission to the repository contents
     steps:
       - name: Checkout
         uses: actions/checkout@v6
