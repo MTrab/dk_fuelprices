@@ -8,7 +8,7 @@
 This integration will provide fuel prices from the companies in Denmark that are publishing prices to their webpages.<br>
 Not all companies does this, thus not all companies are available in the integration.
 
-If you stumble across a company providing public prices, that are not available in the integration, please create an issue providing the full URL to the webpage showing the prices.
+If you stumble across a company providing public prices, that are not available in the integration, [please create an issue providing the full URL to the webpage showing the prices](https://github.com/MTrab/braendstofpriser/issues/new?template=new_company.yml).
 
 ## Table of Content
 
@@ -59,3 +59,5 @@ These are the companies that the integration currently supports:
 *   [OK](https://www.ok.dk)
 *   [Q8](https://www.q8.dk)
 *   [Shell](https://shellservice.dk)
+
+If you stumble across a company providing public prices, that are not available in the integration, [please create an issue providing the full URL to the webpage showing the prices](https://github.com/MTrab/braendstofpriser/issues/new?template=new_company.yml).

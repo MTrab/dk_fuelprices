@@ -1,18 +1,12 @@
 name: Request a new company
 description: Make a request for a new company to be added to the Brændstofpriser integration
 labels: ["companies_new"]
+title: "Requesting new company: COMPANY NAME HERE"
 body:
   - type: markdown
     attributes:
       value: |
         This issue form is for requesting a new company to be added to the integration
-  - type: input
-    id: company_name
-    validations:
-      required: true
-    attributes:
-      label: Name of the company?
-      placeholder: Example Company
   - type: input
     id: url
     validations:
