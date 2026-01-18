@@ -30,7 +30,7 @@ If you stumble across a company providing public prices, that are not available 
 ### Option 2 - Add custom repository to HACS:
 
 *   See [this link](https://www.hacs.xyz/docs/faq/custom_repositories/) for how to add a custom repository to HACS.
-*   Add `https://github.com/MTrab/stromligning` as custom repository of type Integration
+*   Add `https://github.com/MTrab/braendstofpriser` as custom repository of type Integration
 *   Search for and install the "Stromligning" integration.
 *   Restart Home Assistant.
 
@@ -54,6 +54,7 @@ Add "Brændstofpriser" integration _(If it doesn't show, try CTRL+F5 to force a 
 
 These are the companies that the integration currently supports:
 
+*   [F24](https://f24.dk)
 *   [Go'On](https://goon.nu)
 *   [OIL! tank & go](https://www.oil-tankstationer.dk)
 *   [OK](https://www.ok.dk)
