@@ -24,20 +24,20 @@ If you stumble across a company providing public prices, that are not available 
 ~~### Option 1 (easy) - HACS:~~
 
 *   ~~Ensure that HACS is installed.~~
-*   ~~Search for and install the "Stromligning" integration.~~
+*   ~~Search for and install the "Brændstofpriser" integration.~~
 *   ~~Restart Home Assistant.~~
 
 ### Option 2 - Add custom repository to HACS:
 
 *   See [this link](https://www.hacs.xyz/docs/faq/custom_repositories/) for how to add a custom repository to HACS.
 *   Add `https://github.com/MTrab/braendstofpriser` as custom repository of type Integration
-*   Search for and install the "Stromligning" integration.
+*   Search for and install the "Brændstofpriser" integration.
 *   Restart Home Assistant.
 
 ### Option 3 - Manual installation:
 
 *   Download the latest release.
-*   Unpack the release and copy the custom\_components/stromligning directory into the custom\_components directory of your Home Assistant installation.
+*   Unpack the release and copy the custom\_components/braendstofpriser directory into the custom\_components directory of your Home Assistant installation.
 *   Restart Home Assistant.
 
 ## Setup
