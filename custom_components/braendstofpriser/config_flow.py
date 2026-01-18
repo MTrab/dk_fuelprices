@@ -12,7 +12,7 @@ from homeassistant.helpers.event import async_call_later
 from pybraendstofpriser import Braendstofpriser
 
 from . import async_setup_entry, async_unload_entry
-from .const import CONF_COMPANY, CONF_PRODUCTS, DOMAIN
+from .const import CONF_COMPANY, CONF_PRODUCTS, CONF_STATION, DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -41,28 +41,68 @@ class BraendstofpriserConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
     ) -> config_entries.ConfigFlowResult:
-        """Handle the initial step."""
-        if user_input is None:
-            self.companies = await self.api.list_companies()
-            # Show the form to the user
-            return self.async_show_form(
-                step_id="user",
-                data_schema=vol.Schema(
-                    {
-                        vol.Required(CONF_COMPANY): vol.In(list(self.companies.keys())),
-                    }
-                ),
-            )
+        """Handle the initial step - Select company."""
+        if user_input is not None:
+            # Process the user input and show next selection form
+            self.user_input.update(user_input)
+            await self.api.set_company(self.user_input[CONF_COMPANY])
+            return await self.async_step_station_selection()
 
-        # Process the user input and create the config entry
-        self.user_input.update(user_input)
-        return await self.async_step_product_selection()
+        # Get available companies
+        self.companies = await self.api.list_companies()
+
+        # Show the form to the user
+        return self.async_show_form(
+            step_id="user",
+            data_schema=vol.Schema(
+                {
+                    vol.Required(CONF_COMPANY): vol.In(list(self.companies.keys())),
+                }
+            ),
+            errors=self._errors,
+        )
+
+    async def async_step_station_selection(
+        self, user_input: dict[str, Any] | None = None
+    ) -> config_entries.ConfigFlowResult:
+        """Handle the station selection step."""
+        if user_input is not None:
+            # Set UniqueID and abort if already existing
+            await self.async_set_unique_id(
+                f"{self.user_input[CONF_COMPANY]}_{user_input[CONF_STATION]}"
+            )
+            self._abort_if_unique_id_configured()
+            # Process the user input and show next selection form
+            self.user_input.update(user_input)
+            return await self.async_step_product_selection()
+
+        def sorter(e):
+            return e.name
+
+        # Get station list, sort it and make a list with only names
+        stations = await self.api.list_stations()
+        stations.sort(key=sorter)
+        stations = list(v.name for v in stations)
+
+        # Show the form to the user
+        return self.async_show_form(
+            step_id="station_selection",
+            data_schema=vol.Schema(
+                {
+                    vol.Required(CONF_STATION): vol.In(list(stations)),
+                }
+            ),
+            errors=self._errors,
+        )
 
     async def async_step_product_selection(
         self, user_input: dict[str, Any] | None = None
     ) -> config_entries.ConfigFlowResult:
         """Handle the product selection step."""
         if user_input is not None:
+            # Process the user input and create the device
+            #
+            # Match product system name to human readable name
             p_list = {}
             for product, selected in user_input.items():
                 for prod_key, prod_val in self.companies[self.user_input[CONF_COMPANY]][
@@ -71,26 +111,33 @@ class BraendstofpriserConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     if prod_val["name"] == product:
                         p_list.update({prod_key: selected})
 
+            # Create the device entry
             return self.async_create_entry(
-                title=self.user_input[CONF_COMPANY],
-                data={"name": self.user_input[CONF_COMPANY]},
+                title=f"{self.user_input[CONF_COMPANY]}, {self.user_input[CONF_STATION]}",
+                data={
+                    CONF_COMPANY: self.user_input[CONF_COMPANY],
+                    CONF_STATION: self.user_input[CONF_STATION],
+                },
+                description=f"{self.user_input[CONF_COMPANY]}, {self.user_input[CONF_STATION]}",
                 options=p_list,
             )
 
-        # Show the form to the user
-        prod_list = list(
-            v["name"]
-            for _, v in self.companies[self.user_input[CONF_COMPANY]][
-                "products"
-            ].items()
-        )
+        # Get available products and translate the system names to human readable
+        products_available = await self.api.list_products(self.user_input[CONF_STATION])
+        product_names = self.companies[self.user_input[CONF_COMPANY]]["products"]
+        product_list = list(product_names[p]["name"] for p in products_available)
+        product_list.sort()
+
+        # Create a list of available products
         schema = {}
-        for prod in prod_list:
+        for prod in product_list:
             schema.update({vol.Required(prod): bool})
 
+        # Show the form to the user
         return self.async_show_form(
             step_id="product_selection",
             data_schema=vol.Schema(schema),
+            errors=self._errors,
         )
 
 
@@ -115,7 +162,10 @@ class BraendstofpriserOptionsFlow(config_entries.OptionsFlow):
         self, user_input: dict[str, Any] | None = None
     ) -> config_entries.ConfigFlowResult:
         """Handle the initial step."""
-        self.companies = await self.api.list_companies()
+        # self.companies = await self.api.list_companies()
+        company = self.config_entry.data[CONF_COMPANY]
+        await self.api.set_company(company)
+
         if user_input is not None:
             p_list = {}
             for product, selected in user_input.items():
@@ -132,8 +182,18 @@ class BraendstofpriserOptionsFlow(config_entries.OptionsFlow):
                 data=p_list,
             )
 
-        # Show the form to the user
-        company = self.config_entry.data["name"]
+        station = self.config_entry.data[CONF_STATION]
+
+        # Get available products and translate the system names to human readable
+        products_available = await self.api.list_products(self.user_input[CONF_STATION])
+        product_names = self.companies[self.user_input[CONF_COMPANY]]["products"]
+        product_list = list(product_names[p]["name"] for p in products_available)
+        product_list.sort()
+
+        # Create a list of available products
+        schema = {}
+        for prod in product_list:
+            schema.update({vol.Required(prod): bool})
 
         prod_list = list(
             [k, v["name"]] for k, v in self.companies[company]["products"].items()
@@ -150,6 +210,7 @@ class BraendstofpriserOptionsFlow(config_entries.OptionsFlow):
 
         self.user_input.update({CONF_COMPANY: company})
 
+        # Show the form to the user
         return self.async_show_form(
             step_id="init",
             data_schema=vol.Schema(schema),

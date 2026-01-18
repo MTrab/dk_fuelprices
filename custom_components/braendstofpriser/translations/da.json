@@ -1,0 +1,28 @@
+{
+    "title": "Brændstofpriser",
+    "config": {
+        "abort": {
+            "already_configured": "Den valgte station ved dette selskab er allerede konfigureret!"
+        },
+        "step": {
+            "user": {
+                "description": "Vælg det selskab du vil se stationer for",
+                "data": {
+                    "company": "Vælg selskab"
+                }
+            },
+            "station_selection": {
+                "description": "Vælg station som du vil vise priser for",
+                "data": {
+                    "station": "Vælg station"
+                }
+            },
+            "product_selection": {
+                "description": "Vælg de produkter du vil have priser for - der oprettes 1 sensor pr. produkt",
+                "data": {
+                    "products": "Vælg produkt(er)"
+                }
+            }
+        }
+    }
+}

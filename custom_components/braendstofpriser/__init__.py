@@ -11,7 +11,7 @@ from homeassistant.helpers import entity_registry as er
 from homeassistant.loader import async_get_integration
 
 from .api import APIClient, BraendstofpriserConfigEntry
-from .const import ATTR_COORDINATOR, DOMAIN, STARTUP
+from .const import ATTR_COORDINATOR, CONF_COMPANY, CONF_STATION, DOMAIN, STARTUP
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -23,13 +23,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     integration = await async_get_integration(hass, DOMAIN)
     _LOGGER.info(STARTUP, integration.version)
 
-    _LOGGER.debug("Selected products: %s", entry.options)
-    coordinator = APIClient(hass, entry.data["name"], entry.options)
-    await coordinator.initialize()
+    coordinator = APIClient(
+        hass, entry.data[CONF_COMPANY], entry.data[CONF_STATION], entry.options
+    )
+
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.entry_id] = {ATTR_COORDINATOR: coordinator}
 
-    # await coordinator.async_config_entry_first_refresh()
+    await coordinator.async_config_entry_first_refresh()
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     return True

@@ -13,7 +13,9 @@ https://github.com/mtrab/braendstofpriser/issues
 """
 
 DOMAIN = "braendstofpriser"
+
 CONF_COMPANY = "company"
 CONF_PRODUCTS = "products"
+CONF_STATION = "station"
 
 ATTR_COORDINATOR = "coordinator"
