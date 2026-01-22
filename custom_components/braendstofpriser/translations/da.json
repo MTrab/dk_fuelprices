@@ -2,13 +2,14 @@
     "title": "Brændstofpriser",
     "config": {
         "abort": {
-            "already_configured": "Den valgte station ved dette selskab er allerede konfigureret!"
+            "already_configured": "Den valgte station ved dette selskab er allerede konfigureret!",
+            "invalid_api_key": "Ugyldig API-nøgle angivet!"
         },
         "step": {
             "user": {
-                "description": "Vælg det selskab du vil se stationer for",
+                "description": "Indtast din API-nøgle til Fuelprices.dk\nHvis du ikke har en API-nøgle, kan du få en gratis ved at sende en e-mail til keys@fuelprices.dk",
                 "data": {
-                    "company": "Vælg selskab"
+                    "api_key": "Indtast API-nøgle"
                 }
             },
             "station_selection": {
