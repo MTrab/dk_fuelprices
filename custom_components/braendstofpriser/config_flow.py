@@ -151,7 +151,7 @@ class BraendstofpriserConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             }
 
             return self.async_create_entry(
-                title=f"{self.user_input[CONF_COMPANY]}, {self.stations[self.user_input[CONF_STATION]]['name']}",
+                title=f"{self.user_input[CONF_COMPANY]}",
                 data={
                     CONF_COMPANY: self.user_input[CONF_COMPANY],
                     CONF_STATION: self.user_input[CONF_STATION],

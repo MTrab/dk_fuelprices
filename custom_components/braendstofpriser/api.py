@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import logging
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_API_KEY
@@ -46,6 +46,7 @@ class APIClient(DataUpdateCoordinator[None]):
         self.products = {}
         self._last_data: dict = {}
         self.previous_devices: set[str] = set()
+        self.updated_at: datetime | None = None
 
         self.name = self.company
 
@@ -68,6 +69,11 @@ class APIClient(DataUpdateCoordinator[None]):
 
         self._last_data = await self._api.get_prices(self.station_id)
         self.station_name = self._last_data["station"]["name"]
+        self.updated_at = (
+            datetime.fromisoformat(self._last_data["updated_at"])
+            if not isinstance(self._last_data["updated_at"], type(None))
+            else None
+        )
         try:
             for product in self.products:
                 _LOGGER.debug(
@@ -79,6 +85,9 @@ class APIClient(DataUpdateCoordinator[None]):
                     "Updated price for %s: %s",
                     self.products[product]["name"],
                     self._last_data["prices"].get(product),
+                )
+                _LOGGER.debug(
+                    "Updated at: %s", self._last_data.get("updated_at", "UNKNOWN")
                 )
         except ProductNotFoundError as exc:
             raise ConfigEntryError(exc)

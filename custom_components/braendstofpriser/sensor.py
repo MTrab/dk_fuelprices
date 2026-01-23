@@ -5,6 +5,7 @@ from __future__ import annotations
 from homeassistant.components.sensor import (
     SensorDeviceClass,
     SensorEntity,
+    SensorEntityDescription,
     SensorStateClass,
 )
 from homeassistant.core import callback
@@ -15,6 +16,23 @@ from homeassistant.util import slugify as util_slugify
 from .api import APIClient
 from .const import ATTR_COORDINATOR, DOMAIN
 
+SENSORS = [
+    SensorEntityDescription(
+        key="price",
+        name="Fuel Price",
+        native_unit_of_measurement="DKK/L",
+        device_class=SensorDeviceClass.MONETARY,
+        state_class=SensorStateClass.TOTAL,
+        icon="mdi:gas-station",
+    ),
+    SensorEntityDescription(
+        key="last_updated",
+        name="Last Updated",
+        device_class=SensorDeviceClass.TIMESTAMP,
+        icon="mdi:clock-outline",
+    ),
+]
+
 
 async def async_setup_entry(hass, entry, async_add_devices):
     """Set up sensor platform for Braendstofpriser integration."""
@@ -22,8 +40,26 @@ async def async_setup_entry(hass, entry, async_add_devices):
     coordinator = hass.data[DOMAIN][entry.entry_id][ATTR_COORDINATOR]
 
     sensors = []
-    for product_key, product_info in coordinator.products.items():
-        sensors.append(BraendstofpriserSensor(coordinator, product_key, product_info))
+    for sensor in SENSORS:
+        if sensor.key == "last_updated":
+            sensors.append(
+                BraendstofpriserSensor(
+                    coordinator,
+                    "last_updated",
+                    "last_updated",
+                    sensor,
+                )
+            )
+        else:
+            for product_key, product_info in coordinator.products.items():
+                sensors.append(
+                    BraendstofpriserSensor(
+                        coordinator,
+                        product_key,
+                        product_info,
+                        sensor,
+                    )
+                )
 
     async_add_devices(sensors, True)
 
@@ -31,20 +67,21 @@ async def async_setup_entry(hass, entry, async_add_devices):
 class BraendstofpriserSensor(CoordinatorEntity[APIClient], SensorEntity):
     """Sensor for Braendstofpriser integration."""
 
-    _attr_native_unit_of_measurement = "DKK/L"
     _attr_has_entity_name = True
-    _attr_icon = "mdi:gas-station"
-    _attr_device_class = SensorDeviceClass.MONETARY
-    _attr_state_class = SensorStateClass.TOTAL
 
-    def __init__(self, coordinator, product_key, product_info):
+    def __init__(self, coordinator, product_key, product_info, description):
         """Initialize the sensor."""
         super().__init__(coordinator)
+        self.entity_description = description
+
         self._product_key = product_key
         self._product_info = product_info
-        self._attr_name = f"{product_info['name']}"
+        if description.key == "last_updated":
+            self._attr_name = "Last Updated"
+        else:
+            self._attr_name = f"{product_info['name']}"
         self._attr_unique_id = util_slugify(
-            f"{self.coordinator._last_data['company']['name']}_{self.coordinator._last_data['station']['name']}_{product_key}"
+            f"{self.coordinator._last_data['company']['name']}_{self.coordinator._last_data['station']['name']}_{self.entity_description.key}_{product_key}"
         )
 
         self._attr_device_info = DeviceInfo(
@@ -55,16 +92,23 @@ class BraendstofpriserSensor(CoordinatorEntity[APIClient], SensorEntity):
                     self.coordinator._last_data["station"]["name"],
                 )
             },
-            name=f"{self.coordinator._last_data['company']['name']} {self.coordinator._last_data['station']['name']}",
-            manufacturer=f"{self.coordinator._last_data['company']['name']}, {self.coordinator._last_data['station']['name']}",
-            model=product_key,
+            name=self.coordinator._last_data["station"]["name"],
+            manufacturer=self.coordinator._last_data["company"]["name"],
+            model=self.coordinator._last_data["station"]["name"],
         )
 
-        self._attr_native_value = self.coordinator.products[self._product_key]["price"]
+        self._attr_native_value = self.get_value()
+
+    def get_value(self):
+        """Get the current value of the sensor."""
+        if self.entity_description.key == "last_updated":
+            return self.coordinator.updated_at
+        return self.coordinator.products[self._product_key]["price"]
 
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
 
-        self._attr_native_value = self.coordinator.products[self._product_key]["price"]
+        self._attr_native_value = self.get_value()
+
         self.async_write_ha_state()
