@@ -14,5 +14,5 @@
     "requirements": [
         "pybraendstofpriser==2.0.0"
     ],
-    "version": "0.1.0b1"
+    "version": "0.1.0b2"
 }
