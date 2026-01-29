@@ -101,12 +101,13 @@ class BraendstofpriserConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         """Handle the station selection step."""
         if user_input is not None:
             # Match station name to station ID
-            station = self.stations.find("name", user_input[CONF_STATION])
-            user_input[CONF_STATION] = station["id"]
+            user_input[CONF_STATION] = self.stations.find(
+                "name", user_input[CONF_STATION]
+            )
 
             # Set UniqueID and abort if already existing
             await self.async_set_unique_id(
-                f"{self.user_input[CONF_COMPANY]}_{user_input[CONF_STATION]}"
+                f"{self.user_input[CONF_COMPANY]}_{user_input[CONF_STATION]["id"]}"
             )
             self._abort_if_unique_id_configured()
 
@@ -147,12 +148,14 @@ class BraendstofpriserConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     CONF_COMPANY: self.user_input[CONF_COMPANY],
                     CONF_STATION: self.user_input[CONF_STATION],
                 },
-                description=f"{self.user_input[CONF_COMPANY]}, {self.stations.find("id",self.user_input[CONF_STATION])['name']}",
+                description=f"{self.user_input[CONF_COMPANY]}, {self.user_input[CONF_STATION]['name']}",
                 options=config_options,
             )
 
         # Get available products and translate the system names to human readable
-        products_available = await self.api.get_prices(self.user_input[CONF_STATION])
+        products_available = await self.api.get_prices(
+            self.user_input[CONF_STATION]["id"]
+        )
 
         # Create a list of available products
         schema = {}
@@ -172,8 +175,10 @@ class BraendstofpriserOptionsFlow(config_entries.OptionsFlow):
 
     def __init__(self) -> None:
         """Initialize the config flow."""
-        self.api: Braendstofpriser = Braendstofpriser()
-        self.companies = None
+        self.api: Braendstofpriser
+        self.companies = {}
+        self.stations = {}
+        self.company_name = ""
         self._errors = {}
         self.user_input = {}
 
@@ -187,57 +192,52 @@ class BraendstofpriserOptionsFlow(config_entries.OptionsFlow):
     async def async_step_init(
         self, user_input: dict[str, Any] | None = None
     ) -> config_entries.ConfigFlowResult:
-        """Handle the initial step."""
-        # self.companies = await self.api.list_companies()
+        """Handle configurations init step."""
+        # Skip directly to product selection for now.
+        # Later we'll show API key configuration.
+        self.user_input.update(
+            {CONF_API_KEY: self.config_entry.options.get(CONF_API_KEY)}
+        )
+        self.api = Braendstofpriser(self.user_input[CONF_API_KEY])
+        return await self.async_step_product_selection()
+
+    async def async_step_product_selection(
+        self, user_input: dict[str, Any] | None = None
+    ) -> config_entries.ConfigFlowResult:
+        """Handle the product selection step."""
         company = self.config_entry.data[CONF_COMPANY]
-        await self.api.set_company(company)
 
         if user_input is not None:
-            p_list = {}
-            for product, selected in user_input.items():
-                for prod_key, prod_val in self.companies[self.user_input[CONF_COMPANY]][
-                    "products"
-                ].items():
-                    if prod_val["name"] == product:
-                        p_list.update({prod_key: selected})
+            # Process the user input and create the device
+            # Create the device entry
+            config_options = {
+                CONF_PRODUCTS: user_input,
+                CONF_API_KEY: self.user_input[CONF_API_KEY],
+            }
 
             async_call_later(self.hass, 2, self._do_update)
 
             return self.async_create_entry(
                 title=self.user_input[CONF_COMPANY],
-                data=p_list,
+                data=config_options,
             )
-
-        station = self.config_entry.data[CONF_STATION]
 
         # Get available products and translate the system names to human readable
-        products_available = await self.api.list_products(self.user_input[CONF_STATION])
-        product_names = self.companies[self.user_input[CONF_COMPANY]]["products"]
-        product_list = list(product_names[p]["name"] for p in products_available)
-        product_list.sort()
+        products_available = await self.api.get_prices(
+            (self.config_entry.data.get(CONF_STATION))["id"]
+        )
 
+        # Get options
+        product_options = self.config_entry.options.get(CONF_PRODUCTS)
         # Create a list of available products
         schema = {}
-        for prod in product_list:
-            schema.update({vol.Required(prod): bool})
-
-        prod_list = list(
-            [k, v["name"]] for k, v in self.companies[company]["products"].items()
-        )
-        schema = {}
-        for prod in prod_list:
-            schema.update(
-                {
-                    vol.Required(
-                        prod[1], default=self.config_entry.options.get(prod[0], False)
-                    ): bool
-                }
-            )
+        for prod in products_available["prices"].keys():
+            schema.update({vol.Required(prod, default=product_options[prod]): bool})
 
         self.user_input.update({CONF_COMPANY: company})
 
         # Show the form to the user
         return self.async_show_form(
-            step_id="init",
+            step_id="product_selection",
             data_schema=vol.Schema(schema),
         )

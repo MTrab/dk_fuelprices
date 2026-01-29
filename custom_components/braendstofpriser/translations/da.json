@@ -25,5 +25,15 @@
                 }
             }
         }
+    },
+    "options": {
+        "step": {
+            "product_selection": {
+                "description": "Vælg de produkter du vil have priser for - der oprettes 1 sensor pr. produkt",
+                "data": {
+                    "products": "Vælg produkt(er)"
+                }
+            }
+        }
     }
 }
