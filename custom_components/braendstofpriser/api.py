@@ -70,8 +70,8 @@ class APIClient(DataUpdateCoordinator[None]):
         self._last_data = await self._api.get_prices(self.station_id)
         self.station_name = self._last_data["station"]["name"]
         self.updated_at = (
-            datetime.fromisoformat(self._last_data["updated_at"])
-            if not isinstance(self._last_data["updated_at"], type(None))
+            datetime.fromisoformat(self._last_data["station"]["last_update"])
+            if not isinstance(self._last_data["station"]["last_update"], type(None))
             else None
         )
         try:
@@ -87,7 +87,8 @@ class APIClient(DataUpdateCoordinator[None]):
                     self._last_data["prices"].get(product),
                 )
                 _LOGGER.debug(
-                    "Updated at: %s", self._last_data.get("updated_at", "UNKNOWN")
+                    "Updated at: %s",
+                    self._last_data["station"].get("last_update", "UNKNOWN"),
                 )
         except ProductNotFoundError as exc:
             raise ConfigEntryError(exc)

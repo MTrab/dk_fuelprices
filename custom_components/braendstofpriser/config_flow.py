@@ -88,7 +88,7 @@ class BraendstofpriserConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             data_schema=vol.Schema(
                 {
                     vol.Required(CONF_COMPANY): vol.In(
-                        [c["name"] for _, c in self.companies.items()]
+                        [c["company"] for c in self.companies]
                     ),
                 }
             ),
@@ -101,10 +101,8 @@ class BraendstofpriserConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         """Handle the station selection step."""
         if user_input is not None:
             # Match station name to station ID
-            for key, station in self.stations.items():
-                if station["name"] == user_input[CONF_STATION]:
-                    user_input[CONF_STATION] = key
-                    break
+            station = self.stations.find("name", user_input[CONF_STATION])
+            user_input[CONF_STATION] = station["id"]
 
             # Set UniqueID and abort if already existing
             await self.async_set_unique_id(
@@ -116,16 +114,9 @@ class BraendstofpriserConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             self.user_input.update(user_input)
             return await self.async_step_product_selection()
 
-        def sorter(e):
-            return e.name
-
         # Get station list, sort it and make a list with only names
         self.stations = await self.api.list_stations(company_name=self.company_name)
-        self.stations = {
-            k: v
-            for k, v in sorted(self.stations.items(), key=lambda item: item[1]["name"])
-        }
-        stations = list(s["name"] for _, s in self.stations.items())
+        stations = list(s["name"] for s in self.stations)
 
         # Show the form to the user
         return self.async_show_form(
@@ -156,7 +147,7 @@ class BraendstofpriserConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     CONF_COMPANY: self.user_input[CONF_COMPANY],
                     CONF_STATION: self.user_input[CONF_STATION],
                 },
-                description=f"{self.user_input[CONF_COMPANY]}, {self.stations[self.user_input[CONF_STATION]]['name']}",
+                description=f"{self.user_input[CONF_COMPANY]}, {self.stations.find("id",self.user_input[CONF_STATION])['name']}",
                 options=config_options,
             )
 

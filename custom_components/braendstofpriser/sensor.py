@@ -81,19 +81,19 @@ class BraendstofpriserSensor(CoordinatorEntity[APIClient], SensorEntity):
         else:
             self._attr_name = f"{product_info['name']}"
         self._attr_unique_id = util_slugify(
-            f"{self.coordinator._last_data['company']['name']}_{self.coordinator._last_data['station']['name']}_{self.entity_description.key}_{product_key}"
+            f"{self.coordinator._last_data['company']['company']}_{self.coordinator._last_data['station']['name']}_{self.entity_description.key}_{product_key}"
         )
 
         self._attr_device_info = DeviceInfo(
             identifiers={
                 (
                     DOMAIN,
-                    self.coordinator._last_data["company"]["name"],
+                    self.coordinator._last_data["company"]["company"],
                     self.coordinator._last_data["station"]["name"],
                 )
             },
             name=self.coordinator._last_data["station"]["name"],
-            manufacturer=self.coordinator._last_data["company"]["name"],
+            manufacturer=self.coordinator._last_data["company"]["company"],
             model=self.coordinator._last_data["station"]["name"],
         )
 

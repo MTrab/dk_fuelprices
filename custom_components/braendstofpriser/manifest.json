@@ -12,7 +12,7 @@
     "iot_class": "cloud_polling",
     "issue_tracker": "https://github.com/MTrab/braendstofpriser/issues",
     "requirements": [
-        "pybraendstofpriser==2.1.0"
+        "git+https://github.com/mtrab/pybraendstofpriser@Add-find-function#pybraendstofpriser==2.1.1"
     ],
     "version": "0.1.0b2"
 }
