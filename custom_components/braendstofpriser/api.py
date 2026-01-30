@@ -5,6 +5,7 @@ from __future__ import annotations
 import logging
 from datetime import datetime, timedelta
 
+from aiohttp import ClientResponseError
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_API_KEY
 from homeassistant.exceptions import ConfigEntryError
@@ -80,14 +81,15 @@ class APIClient(DataUpdateCoordinator[None]):
 
     async def _async_update_data(self) -> None:
         """Handle data update request from the coordinator."""
-        data = await self._api.get_prices(self.station_id)
-        self.station_name = data["station"]["name"]
-        self.updated_at = (
-            datetime.fromisoformat(data["station"]["last_update"])
-            if not isinstance(data["station"]["last_update"], type(None))
-            else None
-        )
         try:
+            data = await self._api.get_prices(self.station_id)
+            self.station_name = data["station"]["name"]
+            self.updated_at = (
+                datetime.fromisoformat(data["station"]["last_update"])
+                if not isinstance(data["station"]["last_update"], type(None))
+                else None
+            )
+
             for product in self.products:
                 _LOGGER.debug(
                     "Getting price for %s",
@@ -104,4 +106,6 @@ class APIClient(DataUpdateCoordinator[None]):
                     data["station"].get("last_update", "UNKNOWN"),
                 )
         except ProductNotFoundError as exc:
+            raise ConfigEntryError(exc)
+        except ClientResponseError as exc:
             raise ConfigEntryError(exc)
