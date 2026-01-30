@@ -56,6 +56,11 @@ class BraendstofpriserConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 if exc.status == 401:
                     self._errors["base"] = "invalid_api_key"
                     return self.async_abort(reason="invalid_api_key")
+                elif exc.status == 429:
+                    self._errors["base"] = "rate_limit_exceeded"
+                    return self.async_abort(reason="rate_limit_exceeded")
+                else:
+                    return self.async_abort(reason=f"{exc.status}, {exc.message}")
 
             # Proceed to company selection
             self.user_input.update(user_input)
@@ -81,6 +86,9 @@ class BraendstofpriserConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             self.company_name = user_input[CONF_COMPANY]
             self.user_input.update(user_input)
             return await self.async_step_station_selection()
+
+        if len(self.companies) == 0:
+            return self.async_abort(reason="rate_limit_exceeded")
 
         # Show the form to the user
         return self.async_show_form(
@@ -152,10 +160,17 @@ class BraendstofpriserConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 options=config_options,
             )
 
-        # Get available products and translate the system names to human readable
-        products_available = await self.api.get_prices(
-            self.user_input[CONF_STATION]["id"]
-        )
+        try:
+            # Get available products and translate the system names to human readable
+            products_available = await self.api.get_prices(
+                self.user_input[CONF_STATION]["id"]
+            )
+        except ClientResponseError as exc:  # pylint: disable=broad-except
+            if exc.status == 429:
+                self._errors["base"] = "rate_limit_exceeded"
+                return self.async_abort(reason="rate_limit_exceeded")
+            else:
+                return self.async_abort(reason=f"{exc.status}, {exc.message}")
 
         # Create a list of available products
         schema = {}
@@ -222,10 +237,17 @@ class BraendstofpriserOptionsFlow(config_entries.OptionsFlow):
                 data=config_options,
             )
 
-        # Get available products and translate the system names to human readable
-        products_available = await self.api.get_prices(
-            (self.config_entry.data.get(CONF_STATION))["id"]
-        )
+        try:
+            # Get available products and translate the system names to human readable
+            products_available = await self.api.get_prices(
+                (self.config_entry.data.get(CONF_STATION))["id"]
+            )
+        except ClientResponseError as exc:  # pylint: disable=broad-except
+            if exc.status == 429:
+                self._errors["base"] = "rate_limit_exceeded"
+                return self.async_abort(reason="rate_limit_exceeded")
+            else:
+                return self.async_abort(reason=f"{exc.status}, {exc.message}")
 
         # Get options
         product_options = self.config_entry.options.get(CONF_PRODUCTS)

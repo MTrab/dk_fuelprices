@@ -3,7 +3,8 @@
     "config": {
         "abort": {
             "already_configured": "Den valgte station ved dette selskab er allerede konfigureret!",
-            "invalid_api_key": "Ugyldig API-nøgle angivet!"
+            "invalid_api_key": "Ugyldig API-nøgle angivet!",
+            "rate_limit_exceeded": "For mange forespørgsler mod API - prøv igen senere"
         },
         "step": {
             "user": {
