@@ -21,6 +21,8 @@ If you stumble across a company providing public prices, that are not available 
 
 ## Installation:
 
+Aquire your free API key from https://fuelprices.dk - it is required for this integration
+
 ~~### Option 1 (easy) - HACS:~~
 
 *   ~~Ensure that HACS is installed.~~
@@ -52,13 +54,4 @@ Add "Brændstofpriser" integration _(If it doesn't show, try CTRL+F5 to force a 
 
 ## Currently supported companies
 
-These are the companies that the integration currently supports:
-
-*   [F24](https://f24.dk)
-*   [Go'On](https://goon.nu)
-*   [OIL! tank & go](https://www.oil-tankstationer.dk)
-*   [OK](https://www.ok.dk)
-*   [Q8](https://www.q8.dk)
-*   [Shell](https://shellservice.dk)
-
-If you stumble across a company providing public prices, that are not available in the integration, [please create an issue providing the full URL to the webpage showing the prices](https://github.com/MTrab/braendstofpriser/issues/new?template=new_company.yml).
+The supported companies can be seen on https://fuelprices.dk

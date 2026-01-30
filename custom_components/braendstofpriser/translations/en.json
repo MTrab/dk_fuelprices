@@ -7,7 +7,7 @@
         },
         "step": {
             "user": {
-                "description": "Indtast din API-nøgle til Fuelprices.dk\nHvis du ikke har en API-nøgle, kan du få en gratis ved at sende en e-mail til keys@fuelprices.dk",
+                "description": "Indtast din API-nøgle til Fuelprices.dk\nHvis du ikke har en API-nøgle, kan du få en gratis på https://fuelprices.dk",
                 "data": {
                     "api_key": "Indtast API-nøgle"
                 }
