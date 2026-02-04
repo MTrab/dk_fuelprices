@@ -3,7 +3,7 @@
 # Startup banner
 STARTUP = """
 -------------------------------------------------------------------
-Fuelprices DK
+Fuelprices.dk
 
 Version: %s
 This is a custom integration

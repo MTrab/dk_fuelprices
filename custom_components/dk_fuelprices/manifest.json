@@ -1,6 +1,6 @@
 {
     "domain": "dk_fuelprices",
-    "name": "Fuelprices DK",
+    "name": "Fuelprices.dk",
     "after_dependencies": [
         "http"
     ],

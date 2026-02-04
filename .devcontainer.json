@@ -1,16 +1,16 @@
 {
-    "name": "Fuelprices DK",
-    "image": "mcr.microsoft.com/devcontainers/python:3.13-bookworm",
-    "postCreateCommand": "scripts/setup",
-    "appPort": [
-        "9128:8123"
-    ],
-    "portsAttributes": {
-        "8123": {
-            "label": "Home Assistant - Fuelprices DK",
-            "onAutoForward": "notify"
-        }
-    },
+	"name": "Fuelprices.dk",
+	"image": "mcr.microsoft.com/devcontainers/python:3.13-bookworm",
+	"postCreateCommand": "scripts/setup",
+	"appPort": [
+		"9128:8123"
+	],
+	"portsAttributes": {
+		"8123": {
+			"label": "Home Assistant - Fuelprices.dk",
+			"onAutoForward": "notify"
+		}
+	},
 	"customizations": {
 		"vscode": {
 			"extensions": [
@@ -41,5 +41,7 @@
 	"features": {
 		"ghcr.io/devcontainers/features/rust:1": {}
 	},
-	"mounts": ["source=${localEnv:HOME}/.codex/auth.json,target=/etc/codex/auth.json,readonly,type=bind"]
+	"mounts": [
+		"source=${localEnv:HOME}/.codex/auth.json,target=/etc/codex/auth.json,readonly,type=bind"
+	]
 }
