@@ -5,10 +5,7 @@
 
 <a href="https://www.buymeacoffee.com/mtrab" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
 
-This integration will provide fuel prices from the companies in Denmark that are publishing prices to their webpages.<br>
-Not all companies does this, thus not all companies are available in the integration.
-
-If you stumble across a company providing public prices, that are not available in the integration, [please create an issue providing the full URL to the webpage showing the prices](https://github.com/MTrab/pybraendstofpriser/issues/new).
+This integration will provide support for Danish fuelprices, utilizing the [Fuelprices DK API](https://fuelprices.dk)
 
 ## Table of Content
 
