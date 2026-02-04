@@ -1,6 +1,6 @@
 {
     "domain": "dk_fuelprices",
-    "name": "DK Fuelprices",
+    "name": "Fuelprices DK",
     "after_dependencies": [
         "http"
     ],
@@ -12,7 +12,7 @@
     "iot_class": "cloud_polling",
     "issue_tracker": "https://github.com/MTrab/dk_fuelprices/issues",
     "requirements": [
-        "git+https://github.com/mtrab/pybraendstofpriser@Use-dev#pybraendstofpriser==2.2.0"
+        "pybraendstofpriser==2.2.0"
     ],
     "version": "0.1.0b3"
 }
