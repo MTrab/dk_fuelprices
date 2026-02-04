@@ -1,5 +1,5 @@
 {
-    "name": "Brændstofpriser",
+    "name": "Fuelprices DK",
     "image": "mcr.microsoft.com/devcontainers/python:3.13-bookworm",
     "postCreateCommand": "scripts/setup",
     "appPort": [
@@ -7,7 +7,7 @@
     ],
     "portsAttributes": {
         "8123": {
-            "label": "Home Assistant - Braendstofpriser",
+            "label": "Home Assistant - Fuelprices DK",
             "onAutoForward": "notify"
         }
     },
@@ -40,5 +40,6 @@
 	"remoteUser": "root",
 	"features": {
 		"ghcr.io/devcontainers/features/rust:1": {}
-	}
+	},
+	"mounts": ["source=${localEnv:HOME}/.codex/auth.json,target=/etc/codex/auth.json,readonly,type=bind"]
 }

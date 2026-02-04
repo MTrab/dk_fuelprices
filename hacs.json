@@ -1,9 +1,9 @@
 {
-    "name": "Brændstofpriser",
+    "name": "DK Fuelprices",
     "render_readme": true,
     "homeassistant": "2025.10.0",
     "zip_release": false,
-    "filename": "braendstofpriser.zip",
+    "filename": "dk_fuelprices.zip",
     "country": [
         "DK"
     ]

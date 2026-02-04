@@ -1,5 +1,5 @@
 {
-    "title": "Brændstofpriser",
+    "title": "DK Fuelprices",
     "config": {
         "abort": {
             "already_configured": "Den valgte station ved dette selskab er allerede konfigureret!",

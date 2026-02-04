@@ -1,4 +1,4 @@
-"""Config flow for braendstofpriser integration."""
+"""Config flow for dk_fuelprices integration."""
 
 from __future__ import annotations
 
@@ -20,7 +20,7 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class BraendstofpriserConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
-    """Handle a config flow for braendstofpriser."""
+    """Handle a config flow for dk_fuelprices."""
 
     VERSION = 1
     CONNECTION_CLASS = config_entries.CONN_CLASS_CLOUD_POLL
@@ -186,7 +186,7 @@ class BraendstofpriserConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
 
 class BraendstofpriserOptionsFlow(config_entries.OptionsFlow):
-    """Handle a options flow for braendstofpriser."""
+    """Handle a options flow for dk_fuelprices."""
 
     def __init__(self) -> None:
         """Initialize the config flow."""
