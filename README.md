@@ -1,5 +1,5 @@
-![Current Release](https://img.shields.io/github/release/mtrab/braendstofpriser/all.svg?style=plastic)
-![Github All Releases](https://img.shields.io/github/downloads/mtrab/braendstofpriser/total.svg?style=plastic)
+![Current Release](https://img.shields.io/github/release/mtrab/fuelprices_dk/all.svg?style=plastic)
+![Github All Releases](https://img.shields.io/github/downloads/mtrab/fuelprices_dk/total.svg?style=plastic)
 <!--![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg?style=plastic)-->
 
 
@@ -26,31 +26,31 @@ Aquire your free API key from https://fuelprices.dk - it is required for this in
 ~~### Option 1 (easy) - HACS:~~
 
 *   ~~Ensure that HACS is installed.~~
-*   ~~Search for and install the "Brændstofpriser" integration.~~
+*   ~~Search for and install the "Fuelprices DK" integration.~~
 *   ~~Restart Home Assistant.~~
 
 ### Option 2 - Add custom repository to HACS:
 
 *   See [this link](https://www.hacs.xyz/docs/faq/custom_repositories/) for how to add a custom repository to HACS.
-*   Add `https://github.com/MTrab/braendstofpriser` as custom repository of type Integration
-*   Search for and install the "Brændstofpriser" integration.
+*   Add `https://github.com/MTrab/fuelprices_dk` as custom repository of type Integration
+*   Search for and install the "Fuelprices DK" integration.
 *   Restart Home Assistant.
 
 ### Option 3 - Manual installation:
 
 *   Download the latest release.
-*   Unpack the release and copy the custom\_components/braendstofpriser directory into the custom\_components directory of your Home Assistant installation.
+*   Unpack the release and copy the custom\_components/fuelprices_dk directory into the custom\_components directory of your Home Assistant installation.
 *   Restart Home Assistant.
 
 ## Setup
 
 My Home Assistant shortcut:
 
-[![](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=braendstofpriser)
+[![](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=fuelprices_dk)
 
 Or go to Home Assistant > Settings > Integrations
 
-Add "Brændstofpriser" integration _(If it doesn't show, try CTRL+F5 to force a refresh of the page)_
+Add "Fuelprices DK" integration _(If it doesn't show, try CTRL+F5 to force a refresh of the page)_
 
 ## Currently supported companies
 
