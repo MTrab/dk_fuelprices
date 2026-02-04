@@ -1,4 +1,4 @@
-"""Initialize the fuelprices_dk component."""
+"""Initialize the dk_fuelprices component."""
 
 from __future__ import annotations
 
@@ -27,7 +27,7 @@ PLATFORMS = ["sensor"]
 
 
 async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
-    """Set up fuelprices_dk from a config entry."""
+    """Set up dk_fuelprices from a config entry."""
     result = await _setup(hass, config_entry)
 
     await hass.config_entries.async_forward_entry_setups(config_entry, PLATFORMS)

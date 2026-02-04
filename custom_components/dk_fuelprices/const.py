@@ -1,18 +1,18 @@
-"""Constants for the fuelprices_dk integration."""
+"""Constants for the dk_fuelprices integration."""
 
 # Startup banner
 STARTUP = """
 -------------------------------------------------------------------
-Fuelprices DK
+DK Fuelprices
 
 Version: %s
 This is a custom integration
 If you have any issues with this you need to open an issue here:
-https://github.com/mtrab/fuelprices_dk/issues
+https://github.com/mtrab/dk_fuelprices/issues
 -------------------------------------------------------------------
 """
 
-DOMAIN = "fuelprices_dk"
+DOMAIN = "dk_fuelprices"
 
 CONF_COMPANY = "company"
 CONF_PRODUCTS = "products"

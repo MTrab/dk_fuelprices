@@ -3,7 +3,7 @@ default_config:
 logger:
   default: warning
   logs:
-    custom_components.fuelprices_dk: debug
+    custom_components.dk_fuelprices: debug
     pybraendstofpriser: debug
 
 
