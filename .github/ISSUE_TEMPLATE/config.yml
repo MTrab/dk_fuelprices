@@ -1,5 +1,2 @@
 blank_issues_enabled: false
-contact_links:
-  - name: Request a new company
-    url: https://github.com/MTrab/pybraendstofpriser/issues/new
-    about: Request support for a new fuel company
+
