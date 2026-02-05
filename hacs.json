@@ -1,8 +1,8 @@
 {
     "name": "Fuelprices.dk",
     "render_readme": true,
-    "homeassistant": "2025.10.0",
-    "zip_release": false,
+    "homeassistant": "2026.1.0",
+    "zip_release": true,
     "filename": "dk_fuelprices.zip",
     "country": [
         "DK"

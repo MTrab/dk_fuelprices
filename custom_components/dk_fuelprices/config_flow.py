@@ -14,7 +14,7 @@ from homeassistant.helpers.event import async_call_later
 from pybraendstofpriser import Braendstofpriser
 
 from . import async_setup_entry, async_unload_entry
-from .const import CONF_COMPANY, CONF_PRODUCTS, CONF_STATION, DOMAIN
+from .const import CONF_COMPANY, CONF_PRODUCTS, CONF_STATION, DOMAIN,WEBSITE_URL
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -74,7 +74,7 @@ class BraendstofpriserConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     vol.Required(CONF_API_KEY): str,
                 }
             ),
-            errors=self._errors,
+            errors=self._errors,description_placeholders={"website_url":WEBSITE_URL}
         )
 
     async def async_step_company_selection(
