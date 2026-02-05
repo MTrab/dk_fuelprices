@@ -1,4 +1,4 @@
-"""API for Braendstofpriser integration."""
+"""API for dk_fuelprices integration."""
 
 from __future__ import annotations
 
