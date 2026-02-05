@@ -371,7 +371,8 @@ class BraendstofpriserStationSubentryFlow(config_entries.ConfigSubentryFlow):
             if self._reconfigure:
                 entry = self._get_entry()
                 subentry = self._get_reconfigure_subentry()
-                return self.async_update_reload_and_abort(
+                self.hass.config_entries.async_schedule_reload(entry.entry_id)
+                return self.async_update_and_abort(
                     entry,
                     subentry,
                     data=subentry_data,
