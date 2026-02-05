@@ -8,7 +8,7 @@
         },
         "step": {
             "user": {
-                "description": "Indtast din API-nøgle til Fuelprices.dk\nHvis du ikke har en API-nøgle, kan du få en gratis på https://fuelprices.dk",
+                "description": "Indtast din API-nøgle til Fuelprices.dk\nHvis du ikke har en API-nøgle, kan du få en gratis på {website_url}",
                 "data": {
                     "api_key": "Indtast API-nøgle"
                 }
