@@ -1,5 +1,5 @@
 name: Report a bug / issue
-description: Report an issue with the Brændstofpriser integration
+description: Report an issue with the Fuelprices.dk integration
 labels: ["bug"]
 assignees:
   - MTrab
