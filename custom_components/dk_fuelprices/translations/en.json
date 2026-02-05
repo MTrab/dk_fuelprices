@@ -3,7 +3,9 @@
     "config": {
         "abort": {
             "already_configured": "Den valgte station ved dette selskab er allerede konfigureret!",
+            "cannot_connect": "Kan ikke forbinde til API'et. Prøv igen senere.",
             "invalid_api_key": "Ugyldig API-nøgle angivet!",
+            "reauth_successful": "API-nøgle blev opdateret.",
             "rate_limit_exceeded": "For mange forespørgsler mod API - prøv igen senere"
         },
         "step": {
@@ -11,6 +13,18 @@
                 "description": "Indtast din API-nøgle til Fuelprices.dk\nHvis du ikke har en API-nøgle, kan du få en gratis på {website_url}",
                 "data": {
                     "api_key": "Indtast API-nøgle"
+                }
+            },
+            "reauth_confirm": {
+                "description": "Din API-nøgle skal opdateres.",
+                "data": {
+                    "api_key": "Indtast ny API-nøgle"
+                }
+            },
+            "company_selection": {
+                "description": "Vælg selskab",
+                "data": {
+                    "company": "Vælg selskab"
                 }
             },
             "station_selection": {
@@ -23,6 +37,39 @@
                 "description": "Vælg de produkter du vil have priser for - der oprettes 1 sensor pr. produkt",
                 "data": {
                     "products": "Vælg produkt(er)"
+                }
+            }
+        }
+    },
+    "config_subentries": {
+        "station": {
+            "abort": {
+                "already_configured": "Den valgte station ved dette selskab er allerede konfigureret!",
+                "reconfigure_successful": "Produkter blev opdateret."
+            },
+            "entry_type": "Station",
+            "initiate_flow": {
+                "reconfigure": "Rediger produkter",
+                "user": "Tilføj station"
+            },
+            "step": {
+                "company_selection": {
+                    "description": "Vælg selskab",
+                    "data": {
+                        "company": "Vælg selskab"
+                    }
+                },
+                "station_selection": {
+                    "description": "Vælg station som du vil vise priser for",
+                    "data": {
+                        "station": "Vælg station"
+                    }
+                },
+                "product_selection": {
+                    "description": "Vælg de produkter du vil have priser for - der oprettes 1 sensor pr. produkt",
+                    "data": {
+                        "products": "Vælg produkt(er)"
+                    }
                 }
             }
         }

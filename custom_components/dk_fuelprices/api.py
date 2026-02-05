@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 from aiohttp import ClientResponseError
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_API_KEY
-from homeassistant.exceptions import ConfigEntryError
+from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryError
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from pybraendstofpriser import Braendstofpriser
 from pybraendstofpriser.exceptions import ProductNotFoundError
@@ -26,7 +26,13 @@ class APIClient(DataUpdateCoordinator[None]):
     """DataUpdateCoordinator for Braendstofpriser."""
 
     def __init__(
-        self, hass, api_key: str, company: str, station: dict, products: dict
+        self,
+        hass,
+        api_key: str,
+        company: str,
+        station: dict,
+        products: dict,
+        subentry_id: str,
     ) -> None:
         """Initialize the API client."""
         DataUpdateCoordinator.__init__(
@@ -44,6 +50,7 @@ class APIClient(DataUpdateCoordinator[None]):
         self.company: str = company
         self.station_id: int = station["id"]
         self.station_name: str = station["name"]
+        self.subentry_id: str = subentry_id
         self._products: dict = products
         self.products = {}
         self.previous_devices: set[str] = set()
@@ -108,4 +115,6 @@ class APIClient(DataUpdateCoordinator[None]):
         except ProductNotFoundError as exc:
             raise ConfigEntryError(exc)
         except ClientResponseError as exc:
+            if exc.status == 401:
+                raise ConfigEntryAuthFailed(exc)
             raise ConfigEntryError(exc)
