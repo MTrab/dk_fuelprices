@@ -19,3 +19,5 @@ CONF_PRODUCTS = "products"
 CONF_STATION = "station"
 
 ATTR_COORDINATOR = "coordinator"
+
+WEBSITE_URL = "https://fuelprices.dk"
