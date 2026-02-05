@@ -37,31 +37,38 @@ SENSORS = [
 async def async_setup_entry(hass, entry, async_add_devices):
     """Set up sensor platform for Braendstofpriser integration."""
 
-    coordinator = hass.data[DOMAIN][entry.entry_id][ATTR_COORDINATOR]
+    subentries = hass.data[DOMAIN][entry.entry_id]["subentries"]
 
     sensors = []
-    for sensor in SENSORS:
-        if sensor.key == "last_updated":
-            sensors.append(
-                BraendstofpriserSensor(
-                    coordinator,
-                    "last_updated",
-                    "last_updated",
-                    sensor,
-                )
-            )
-        else:
-            for product_key, product_info in coordinator.products.items():
-                sensors.append(
+    for subentry_data in subentries.values():
+        coordinator = subentry_data[ATTR_COORDINATOR]
+        subentry_sensors = []
+        for sensor in SENSORS:
+            if sensor.key == "last_updated":
+                subentry_sensors.append(
                     BraendstofpriserSensor(
                         coordinator,
-                        product_key,
-                        product_info["name"],
+                        "last_updated",
+                        "last_updated",
                         sensor,
                     )
                 )
+            else:
+                for product_key, product_info in coordinator.products.items():
+                    subentry_sensors.append(
+                        BraendstofpriserSensor(
+                            coordinator,
+                            product_key,
+                            product_info["name"],
+                            sensor,
+                        )
+                    )
 
-    async_add_devices(sensors, True)
+        async_add_devices(
+            subentry_sensors,
+            True,
+            config_subentry_id=coordinator.subentry_id,
+        )
 
 
 class BraendstofpriserSensor(CoordinatorEntity[APIClient], RestoreSensor):
@@ -83,15 +90,15 @@ class BraendstofpriserSensor(CoordinatorEntity[APIClient], RestoreSensor):
             self._attr_name = f"{product_name}"
 
         self._attr_unique_id = util_slugify(
-            f"{self.coordinator.company}_{self.coordinator.station_id}_{self.entity_description.key}_{product_key}"
+            f"{self.coordinator.subentry_id}_{self.entity_description.key}_{product_key}"
         )
+        self._attr_config_subentry_id = self.coordinator.subentry_id
 
         self._attr_device_info = DeviceInfo(
             identifiers={
                 (
                     DOMAIN,
-                    self.coordinator.company,
-                    self.coordinator.station_name,
+                    self.coordinator.subentry_id,
                 )
             },
             name=self.coordinator.station_name,

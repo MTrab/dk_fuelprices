@@ -14,5 +14,6 @@
     "requirements": [
         "pybraendstofpriser==2.2.0"
     ],
+    "single_config_entry": true,
     "version": "0.1.0b3"
 }
