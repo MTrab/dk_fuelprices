@@ -16,7 +16,7 @@ jobs:
       contents: write # Grant write permission to the repository contents
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - name: Create Release
