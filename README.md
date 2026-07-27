@@ -2,8 +2,9 @@
 ![Github All Releases](https://img.shields.io/github/downloads/mtrab/dk_fuelprices/total.svg?style=plastic)
 <!--![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg?style=plastic)-->
 
-
 <a href="https://www.buymeacoffee.com/mtrab" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
+
+# AS OF HOME ASSISTANT 2026.8.0 THIS INTEGRATION IS INCLUDED IN CORE AND THEREFORE NO LONGER MAINTAINED ON THIS REPO!
 
 This integration will provide support for Danish fuelprices, utilizing the [Fuelprices.dk API](https://fuelprices.dk)
 
